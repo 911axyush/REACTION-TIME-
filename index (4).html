@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaction Time Test</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap"
+        rel="stylesheet"
+    >
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================================================
+         NAME MODAL  — shown first before anything else
+    ================================================== -->
+    <div id="nameModal">
+        <div class="modal-card">
+
+            <h2>REFLEX</h2>
+            <p>Reaction Time Tester — Enter your name to begin</p>
+
+            <input
+                type="text"
+                id="modalNameInput"
+                placeholder="Your name..."
+                maxlength="20"
+                autocomplete="off"
+            >
+
+            <button onclick="setPlayerName()">
+                Enter the Arena
+            </button>
+
+        </div>
+    </div>
+
+
+    <!-- ================================================
+         TOP NAVIGATION BAR
+    ================================================== -->
+    <nav>
+
+        <div class="nav-logo">
+            REFLEX<span>.io</span>
+        </div>
+
+        <div class="nav-links">
+            <button class="active" onclick="showPage('test', this)">Test</button>
+            <button onclick="showPage('leaderboard', this)">Leaderboard</button>
+            <button onclick="showPage('forum', this)">Forum</button>
+        </div>
+
+        <div class="player-badge">
+            Player: <span id="playerNameDisplay">—</span>
+        </div>
+
+    </nav>
+
+
+    <!-- ================================================
+         PAGE 1 — REACTION TEST
+    ================================================== -->
+    <div id="test" class="page active">
+
+        <!-- Heading -->
+        <div class="test-header">
+            <h1>Reaction<br>Time Test</h1>
+            <p>5 attempts — click when the box turns green</p>
+        </div>
+
+        <!-- The big clickable box -->
+        <div class="box idle" id="reactionBox" onclick="handleBoxClick()">
+            <h2>Click Start</h2>
+        </div>
+
+        <!-- Progress dots — one per attempt -->
+        <div class="progress-row" id="progressRow">
+            <div class="attempt-dot" id="dot0"></div>
+            <div class="attempt-dot" id="dot1"></div>
+            <div class="attempt-dot" id="dot2"></div>
+            <div class="attempt-dot" id="dot3"></div>
+            <div class="attempt-dot" id="dot4"></div>
+        </div>
+
+        <!-- Start / Reset buttons -->
+        <div class="controls">
+            <button class="btn btn-primary" id="startBtn" onclick="startTest()">
+                Start Test
+            </button>
+            <button class="btn btn-secondary" id="resetBtn" onclick="resetTest()" style="display: none;">
+                Reset
+            </button>
+        </div>
+
+        <!-- Results show up here after all 5 attempts -->
+        <div id="resultsPanel"></div>
+
+    </div>
+
+
+    <!-- ================================================
+         PAGE 2 — LEADERBOARD
+    ================================================== -->
+    <div id="leaderboard" class="page">
+
+        <div class="page-title">Leaderboard</div>
+        <div class="page-subtitle">Top reaction times — sorted by average</div>
+
+        <p id="lbEmpty">No scores yet — be the first!</p>
+
+        <table class="lb-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Avg (ms)</th>
+                    <th>Best (ms)</th>
+                </tr>
+            </thead>
+            <tbody id="lbBody"></tbody>
+        </table>
+
+    </div>
+
+
+    <!-- ================================================
+         PAGE 3 — FORUM
+    ================================================== -->
+    <div id="forum" class="page">
+
+        <div class="page-title">Forum</div>
+        <div class="page-subtitle">Share your scores, tips, or trash talk</div>
+
+        <!-- Compose area -->
+        <div class="forum-compose">
+
+            <label>Your Name</label>
+            <input type="text" id="forumName" placeholder="Name..." maxlength="30">
+
+            <label>Message</label>
+            <textarea id="forumMsg" placeholder="What's on your mind?"></textarea>
+
+            <button class="btn-post" onclick="postForum()">Post</button>
+
+        </div>
+
+        <!-- All posts appear here -->
+        <div id="forumPosts"></div>
+
+    </div>
+
+
+    <!-- JavaScript lives in its own file -->
+    <script src="app.js"></script>
+
+</body>
+</html>

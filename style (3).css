@@ -1,0 +1,690 @@
+/* ==============================================
+   CSS VARIABLES  — change these to retheme the
+   whole app in one place
+   ============================================== */
+
+:root {
+    --bg:        #0a0a0f;       /* main page background */
+    --surface:   #111118;       /* card / panel background */
+    --surface2:  #1a1a24;       /* slightly lighter surface */
+    --border:    #2a2a3a;       /* subtle border colour */
+    --text:      #e8e8f0;       /* primary text */
+    --muted:     #5a5a7a;       /* secondary / dimmed text */
+    --accent:    #00ff88;       /* green — "go" / success colour */
+    --danger:    #ff3366;       /* red-pink — errors / forum */
+    --warn:      #ffaa00;       /* amber — "wait" state */
+}
+
+
+/* ==============================================
+   GLOBAL RESET
+   ============================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Subtle gradient glow sitting behind everything */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 40% at 20% 0%,   rgba(0, 255, 136, 0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 30% at 80% 100%,  rgba(255,  51, 102, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+
+/* ==============================================
+   NAME MODAL  — covers the whole screen on load
+   ============================================== */
+
+#nameModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 48px 40px;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    /* the clipped corner on the top-right */
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+}
+
+/* green line along the top of the modal */
+.modal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+.modal-card h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+    color: var(--accent);
+}
+
+.modal-card p {
+    color: var(--muted);
+    font-size: 0.78rem;
+    margin-bottom: 32px;
+}
+
+.modal-card input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    padding: 14px 16px;
+    outline: none;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+}
+
+.modal-card input:focus {
+    border-color: var(--accent);
+}
+
+.modal-card input::placeholder {
+    color: var(--muted);
+}
+
+.modal-card button {
+    width: 100%;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    padding: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.modal-card button:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+.modal-card button:active {
+    transform: translateY(0);
+}
+
+
+/* ==============================================
+   NAVIGATION BAR
+   ============================================== */
+
+nav {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 4px;
+    color: var(--accent);
+}
+
+/* the ".io" part is dimmed */
+.nav-logo span {
+    color: var(--muted);
+}
+
+.nav-links {
+    display: flex;
+    gap: 4px;
+}
+
+.nav-links button {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.nav-links button:hover {
+    color: var(--text);
+    border-color: var(--border);
+}
+
+/* currently selected nav tab */
+.nav-links button.active {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.player-badge {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    color: var(--muted);
+}
+
+.player-badge span {
+    color: var(--accent);
+}
+
+
+/* ==============================================
+   PAGE SWITCHING  — only .active page is shown
+   ============================================== */
+
+.page {
+    display: none;
+    position: relative;
+    z-index: 1;
+}
+
+.page.active {
+    display: block;
+}
+
+
+/* ==============================================
+   TEST PAGE  — centred column layout
+   ============================================== */
+
+#test {
+    min-height: calc(100vh - 73px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    gap: 32px;
+}
+
+.test-header {
+    text-align: center;
+}
+
+.test-header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    letter-spacing: 6px;
+    line-height: 1;
+}
+
+.test-header p {
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    margin-top: 6px;
+}
+
+
+/* ==============================================
+   REACTION BOX  — the big clickable area
+   ============================================== */
+
+.box {
+    width: min(420px, 90vw);
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    position: relative;
+    user-select: none;
+    overflow: hidden;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+/* default / resting state */
+.box.idle {
+    background: var(--surface);
+}
+
+/* waiting for the timer — amber pulse */
+.box.wait {
+    background: rgba(255, 170, 0, 0.06);
+    border-color: var(--warn);
+    animation: pulse-warn 1s ease-in-out infinite;
+}
+
+/* GO! — flash green */
+.box.go {
+    background: rgba(0, 255, 136, 0.08);
+    border-color: var(--accent);
+    animation: flash-go 0.15s ease-out;
+}
+
+/* amber glow pulse while waiting */
+@keyframes pulse-warn {
+    0%,  100% { box-shadow: 0 0  0px  0px rgba(255, 170,  0, 0.2); }
+    50%        { box-shadow: 0 0 20px  4px rgba(255, 170,  0, 0.15); }
+}
+
+/* quick green flash when GO triggers */
+@keyframes flash-go {
+    0%   { background: rgba(0, 255, 136, 0.30); }
+    100% { background: rgba(0, 255, 136, 0.08); }
+}
+
+/* big CLICK! text inside the go state */
+.box h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    letter-spacing: 6px;
+    color: var(--accent);
+}
+
+/* "Wait for green..." text inside wait state */
+.box h2 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.box.wait h2 {
+    color: var(--warn);
+}
+
+
+/* ==============================================
+   PROGRESS DOTS  — one per attempt
+   ============================================== */
+
+.progress-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.attempt-dot {
+    width: 28px;
+    height: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    transition: background 0.3s, border-color 0.3s;
+}
+
+/* completed attempt */
+.attempt-dot.done {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+/* the attempt currently in progress — blinks amber */
+.attempt-dot.current {
+    background: var(--warn);
+    border-color: var(--warn);
+    animation: blink 0.8s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%,  100% { opacity: 1;   }
+    50%        { opacity: 0.4; }
+}
+
+
+/* ==============================================
+   CONTROL BUTTONS
+   ============================================== */
+
+.controls {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 3px;
+    padding: 12px 28px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* filled green — primary action */
+.btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+}
+
+.btn-primary:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 255, 136, 0.2);
+}
+
+/* ghost — secondary action */
+.btn-secondary {
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--border);
+}
+
+.btn-secondary:hover {
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+
+/* ==============================================
+   RESULTS PANEL  — shown after all 5 attempts
+   ============================================== */
+
+#resultsPanel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    min-height: 80px;
+}
+
+.results-grid {
+    display: flex;
+    gap: 24px;
+}
+
+.result-card {
+    text-align: center;
+    padding: 16px 28px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    position: relative;
+    animation: slideUp 0.4s ease-out;
+}
+
+/* green line along the top of each result card */
+.result-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--accent);
+}
+
+.result-label {
+    font-size: 0.62rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.result-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    line-height: 1;
+}
+
+.result-value span {
+    font-size: 1rem;
+    color: var(--muted);
+}
+
+/* card entrance animation */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+
+/* ==============================================
+   LEADERBOARD PAGE
+   ============================================== */
+
+#leaderboard {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.page-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 6px;
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+}
+
+.lb-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.lb-table thead tr {
+    border-bottom: 1px solid var(--border);
+}
+
+.lb-table th {
+    font-size: 0.62rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 0 12px 16px;
+    font-weight: 400;
+}
+
+/* right-align the last column */
+.lb-table th:last-child,
+.lb-table td:last-child {
+    text-align: right;
+}
+
+.lb-table tbody tr {
+    border-bottom: 1px solid rgba(42, 42, 58, 0.5);
+    transition: background 0.15s;
+}
+
+.lb-table tbody tr:hover {
+    background: var(--surface);
+}
+
+.lb-table td {
+    padding: 16px 12px;
+    font-size: 0.85rem;
+}
+
+/* rank number column */
+.rank-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: var(--muted);
+    width: 40px;
+}
+
+/* first place is green */
+.lb-table tbody tr:first-child .rank-num {
+    color: var(--accent);
+}
+
+/* second place is amber */
+.lb-table tbody tr:nth-child(2) .rank-num {
+    color: var(--warn);
+}
+
+/* ms values in the score columns */
+.lb-ms {
+    color: var(--accent);
+    font-size: 0.8rem;
+}
+
+/* empty state message */
+#lbEmpty {
+    display: none;
+    text-align: center;
+    padding: 60px 0;
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+}
+
+
+/* ==============================================
+   FORUM PAGE
+   ============================================== */
+
+#forum {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+/* compose / write a new post area */
+.forum-compose {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+/* red-pink line along the top of the compose box */
+.forum-compose::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--danger), transparent);
+}
+
+.forum-compose label {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.forum-compose input,
+.forum-compose textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    padding: 12px 14px;
+    outline: none;
+    margin-bottom: 16px;
+    resize: none;
+    transition: border-color 0.2s;
+}
+
+.forum-compose input:focus,
+.forum-compose textarea:focus {
+    border-color: var(--danger);
+}
+
+.forum-compose textarea {
+    height: 90px;
+}
+
+/* Post button */
+.btn-post {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    padding: 10px 24px;
+    background: var(--danger);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-post:hover {
+    opacity: 0.8;
+}
+
+/* list of all posts */
+#forumPosts {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.forum-post {
+    background: var(--surface);
+    padding: 20px 24px;
+    border-left: 2px solid var(--border);
+    transition: border-color 0.2s;
+    animation: slideUp 0.3s ease-out;
+}
+
+.forum-post:hover {
+    border-color: var(--danger);
+}
+
+.forum-post b {
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--danger);
+    font-weight: 500;
+}
+
+.forum-post p {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.6;
+}
